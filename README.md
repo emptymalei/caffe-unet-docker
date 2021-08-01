@@ -1,3 +1,7 @@
+Added Dockerfile for CPU based model
+
+----
+
 # The U-Net segmentation server (caffe_unet) - in Docker
 
 [![License](https://img.shields.io/badge/license-GPLv3-blue.svg)](LICENSE)
