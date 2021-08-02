@@ -12,6 +12,8 @@ USER ${USER}
 ENV HOME=/home/${USER}
 WORKDIR ${HOME}
 
+ENV PWD=pwd
+
 # Setup environment
 RUN echo ". ~/.bashrc" > .profile && \
     echo "COL=\"\\\\[\\\\033[0;33m\\\\]\"" > .bashrc && \
@@ -24,4 +26,4 @@ RUN echo ". ~/.bashrc" > .profile && \
     tar xfz caffe_unet_package_18.04_cpu.tar.gz && \
     rm caffe_unet_package_18.04_cpu.tar.gz
 
-ENTRYPOINT echo "== Set password for unetuser == " && sudo passwd unetuser && sudo service ssh start && sudo rm /etc/sudoers.d/${USER} && /bin/bash
+ENTRYPOINT echo 'unetuser:${PWD}' | sudo chpasswd && sudo service ssh start && sudo rm /etc/sudoers.d/${USER} && /bin/bash
