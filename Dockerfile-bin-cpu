@@ -12,8 +12,6 @@ USER ${USER}
 ENV HOME=/home/${USER}
 WORKDIR ${HOME}
 
-ENV PWD=pwd
-
 # Setup environment
 RUN echo ". ~/.bashrc" > .profile && \
     echo "COL=\"\\\\[\\\\033[0;33m\\\\]\"" > .bashrc && \
@@ -26,4 +24,8 @@ RUN echo ". ~/.bashrc" > .profile && \
     tar xfz caffe_unet_package_18.04_cpu.tar.gz && \
     rm caffe_unet_package_18.04_cpu.tar.gz
 
-ENTRYPOINT echo 'unetuser:${PWD}' | sudo chpasswd && sudo service ssh start && sudo rm /etc/sudoers.d/${USER} && /bin/bash
+
+# authorize SSH connection with root account
+
+
+ENTRYPOINT echo 'unetuser:unet' | sudo chpasswd && sudo sed -i '/^#/!s/PasswordAuthentication .*/PasswordAuthentication yes/' /etc/ssh/sshd_config && sudo sed -i '/^#/!s/PermitRootLogin .*/PermitRootLogin yes/' /etc/ssh/sshd_config && sudo service ssh start && sudo rm /etc/sudoers.d/${USER} && tail -f /dev/null
